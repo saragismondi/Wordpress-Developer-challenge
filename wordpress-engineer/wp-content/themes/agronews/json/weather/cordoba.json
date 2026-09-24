@@ -1,0 +1,48 @@
+{
+	"city": "Córdoba",
+	"region": "Centro",
+	"updated": "2026-09-01",
+	"source": "AgroNews fictional forecast",
+	"days": [
+		{
+			"date": "2026-09-01",
+			"summary": "Clear",
+			"min_c": 7,
+			"max_c": 22,
+			"rain_mm": 0,
+			"wind_kph": 12
+		},
+		{
+			"date": "2026-09-02",
+			"summary": "Partly cloudy",
+			"min_c": 9,
+			"max_c": 24,
+			"rain_mm": 0.2,
+			"wind_kph": 16
+		},
+		{
+			"date": "2026-09-03",
+			"summary": "Thunderstorms",
+			"min_c": 14,
+			"max_c": 21,
+			"rain_mm": 18.4,
+			"wind_kph": 31
+		},
+		{
+			"date": "2026-09-04",
+			"summary": "Overcast",
+			"min_c": 11,
+			"max_c": 19,
+			"rain_mm": 3.0,
+			"wind_kph": 20
+		},
+		{
+			"date": "2026-09-05",
+			"summary": "Clear",
+			"min_c": 6,
+			"max_c": 21,
+			"rain_mm": 0,
+			"wind_kph": 10
+		}
+	]
+}

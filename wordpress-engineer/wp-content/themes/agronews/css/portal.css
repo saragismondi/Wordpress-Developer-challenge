@@ -1,0 +1,573 @@
+/*
+ * AgroNews portal layout.
+ *
+ * Depends on style.css (handle agronews-base) for resets and typography.
+ * Plain CSS on purpose: the theme has no build step.
+ */
+
+:root {
+	--an-green: #2f6d3c;
+	--an-green-dark: #1f4a28;
+	--an-sand: #f6f4ee;
+	--an-ink: #1c1c1a;
+	--an-muted: #5f6660;
+	--an-line: #dfdcd2;
+	--an-max: 1200px;
+}
+
+body {
+	background: #fff;
+	color: var(--an-ink);
+}
+
+/* Header ------------------------------------------------------------- */
+
+.an-header {
+	border-bottom: 3px solid var(--an-green);
+	background: #fff;
+}
+
+.an-header__inner,
+.an-footer__inner,
+.site-main {
+	box-sizing: border-box;
+	margin: 0 auto;
+	max-width: var(--an-max);
+	padding: 0 1.25rem;
+	width: 100%;
+}
+
+.an-header__inner {
+	align-items: center;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 1rem;
+	justify-content: space-between;
+	padding-bottom: 1rem;
+	padding-top: 1rem;
+}
+
+.an-header .site-title {
+	font-size: 2rem;
+	letter-spacing: -0.02em;
+	line-height: 1.1;
+	margin: 0;
+}
+
+.an-header .site-title a {
+	color: var(--an-green-dark);
+	text-decoration: none;
+}
+
+.an-header .site-description {
+	color: var(--an-muted);
+	font-size: 0.85rem;
+	margin: 0.15rem 0 0;
+}
+
+.an-nav ul {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 1rem;
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.an-nav a {
+	color: var(--an-ink);
+	font-weight: 600;
+	text-decoration: none;
+	text-transform: uppercase;
+	font-size: 0.8rem;
+	letter-spacing: 0.04em;
+}
+
+.an-nav a:hover,
+.an-nav a:focus {
+	color: var(--an-green);
+}
+
+/* Quotes bar --------------------------------------------------------- */
+
+.an-quotes {
+	background: var(--an-green-dark);
+	border-radius: 4px;
+	color: #fff;
+	margin: 1.5rem 0;
+	overflow-x: auto;
+	padding: 0.6rem 1rem;
+}
+
+.an-quotes__list {
+	display: flex;
+	gap: 1.75rem;
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	white-space: nowrap;
+}
+
+.an-quotes__label {
+	font-size: 0.7rem;
+	letter-spacing: 0.08em;
+	opacity: 0.8;
+	text-transform: uppercase;
+}
+
+.an-quotes__value {
+	font-weight: 700;
+	margin-left: 0.4rem;
+}
+
+.an-quotes__item.is-current {
+	text-decoration: underline;
+	text-underline-offset: 4px;
+}
+
+/* Blocks ------------------------------------------------------------- */
+
+.an-block {
+	margin: 2.5rem 0;
+}
+
+.an-block__title {
+	border-bottom: 2px solid var(--an-line);
+	color: var(--an-green-dark);
+	font-size: 1.1rem;
+	letter-spacing: 0.06em;
+	margin: 0 0 1.25rem;
+	padding-bottom: 0.4rem;
+	text-transform: uppercase;
+}
+
+.an-block__title a {
+	color: inherit;
+	text-decoration: none;
+}
+
+.an-home__columns {
+	display: grid;
+	gap: 2rem;
+	grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+}
+
+.an-grid {
+	display: grid;
+	gap: 1.5rem;
+}
+
+.an-grid--featured {
+	grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.an-grid--featured .an-card--lead {
+	grid-column: span 4;
+}
+
+.an-grid--sections {
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.an-grid--archive,
+.an-grid--related {
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+/* Cards -------------------------------------------------------------- */
+
+.an-card {
+	display: flex;
+	flex-direction: column;
+	gap: 0.6rem;
+}
+
+.an-card__media img {
+	border-radius: 3px;
+	display: block;
+	height: auto;
+	width: 100%;
+}
+
+.an-card__kicker {
+	color: var(--an-green);
+	font-size: 0.7rem;
+	font-weight: 700;
+	letter-spacing: 0.08em;
+	text-decoration: none;
+	text-transform: uppercase;
+}
+
+.an-card__title {
+	font-size: 1.05rem;
+	line-height: 1.3;
+	margin: 0;
+}
+
+.an-card--lead .an-card__title {
+	font-size: 1.9rem;
+}
+
+/* The lead art is 16:9; cropping it keeps the block from pushing the rest of
+   the home below the fold on wide screens. */
+.an-card--lead .an-card__media img {
+	max-height: 420px;
+	object-fit: cover;
+}
+
+.an-card__title a {
+	color: var(--an-ink);
+	text-decoration: none;
+}
+
+.an-card__title a:hover,
+.an-card__title a:focus {
+	color: var(--an-green);
+}
+
+.an-card__excerpt {
+	color: var(--an-muted);
+	margin: 0;
+}
+
+.an-card__meta {
+	color: var(--an-muted);
+	font-size: 0.78rem;
+	margin: 0;
+}
+
+.an-card__sep {
+	margin: 0 0.35rem;
+}
+
+.an-card--row {
+	border-bottom: 1px solid var(--an-line);
+	display: grid;
+	gap: 1rem;
+	grid-template-columns: 120px minmax(0, 1fr);
+	padding-bottom: 1rem;
+}
+
+.an-card--compact .an-card__title {
+	font-size: 0.95rem;
+}
+
+.an-list {
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+}
+
+.an-section__items {
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+}
+
+.an-section__title {
+	font-size: 0.95rem;
+	margin: 0 0 0.75rem;
+	text-transform: uppercase;
+}
+
+.an-section__title a {
+	color: var(--an-green-dark);
+	text-decoration: none;
+}
+
+/* Ranking ------------------------------------------------------------ */
+
+.an-ranking {
+	display: grid;
+	gap: 1.25rem;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.an-ranking__item {
+	display: grid;
+	gap: 0.75rem;
+	grid-template-columns: 2rem minmax(0, 1fr);
+}
+
+.an-ranking__position {
+	color: var(--an-green);
+	font-size: 1.6rem;
+	font-weight: 700;
+	line-height: 1;
+}
+
+/* Weather ------------------------------------------------------------ */
+
+.an-block--weather {
+	background: var(--an-sand);
+	border-radius: 4px;
+	padding: 1rem 1.25rem;
+}
+
+.an-weather__place {
+	font-weight: 700;
+	margin: 0 0 0.75rem;
+}
+
+.an-weather__region {
+	color: var(--an-muted);
+	font-weight: 400;
+}
+
+.an-weather__days {
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.an-weather__day {
+	border-bottom: 1px dotted var(--an-line);
+	display: grid;
+	gap: 0.25rem;
+	grid-template-columns: 3.5rem minmax(0, 1fr) auto;
+	padding-bottom: 0.5rem;
+}
+
+.an-weather__rain,
+.an-weather__temp {
+	text-align: right;
+}
+
+.an-weather__summary,
+.an-weather__rain {
+	color: var(--an-muted);
+	font-size: 0.85rem;
+}
+
+.an-weather__updated {
+	color: var(--an-muted);
+	font-size: 0.75rem;
+	margin: 0.75rem 0 0;
+}
+
+/* Single ------------------------------------------------------------- */
+
+.an-story__title {
+	font-size: 2.4rem;
+	line-height: 1.15;
+	margin: 0 0 0.5rem;
+}
+
+.an-story__meta {
+	color: var(--an-muted);
+	font-size: 0.85rem;
+	margin-bottom: 1.5rem;
+}
+
+.an-story__meta .byline {
+	margin-left: 0.5rem;
+}
+
+.an-story__content {
+	font-size: 1.05rem;
+	line-height: 1.7;
+	max-width: 46rem;
+}
+
+.an-byline {
+	background: var(--an-sand);
+	border-radius: 4px;
+	display: grid;
+	gap: 1rem;
+	grid-template-columns: 64px minmax(0, 1fr);
+	margin: 2rem 0;
+	padding: 1rem;
+}
+
+.an-byline__img {
+	border-radius: 50%;
+}
+
+.an-byline__name {
+	font-weight: 700;
+	margin: 0 0 0.25rem;
+}
+
+.an-byline__name a {
+	color: var(--an-green-dark);
+	text-decoration: none;
+}
+
+.an-byline__bio {
+	color: var(--an-muted);
+	margin: 0 0 0.5rem;
+}
+
+.an-byline__links {
+	display: flex;
+	gap: 0.75rem;
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.an-share {
+	align-items: center;
+	display: flex;
+	gap: 0.75rem;
+	margin: 1.5rem 0;
+}
+
+.an-share__label {
+	font-size: 0.75rem;
+	font-weight: 700;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+}
+
+.an-share__list {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.5rem;
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.an-share__link {
+	border: 1px solid var(--an-line);
+	border-radius: 999px;
+	color: var(--an-ink);
+	display: inline-block;
+	font-size: 0.75rem;
+	padding: 0.25rem 0.75rem;
+	text-decoration: none;
+}
+
+.an-share__link:hover,
+.an-share__link:focus {
+	background: var(--an-green);
+	border-color: var(--an-green);
+	color: #fff;
+}
+
+/* Footer ------------------------------------------------------------- */
+
+.an-footer {
+	background: var(--an-sand);
+	border-top: 3px solid var(--an-green);
+	margin-top: 3rem;
+	padding: 2rem 0;
+}
+
+.an-topics__title {
+	font-size: 0.9rem;
+	letter-spacing: 0.06em;
+	margin: 0 0 0.75rem;
+	text-transform: uppercase;
+}
+
+.an-topics__list {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.5rem;
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.an-topics__link {
+	background: #fff;
+	border: 1px solid var(--an-line);
+	border-radius: 999px;
+	color: var(--an-ink);
+	display: inline-block;
+	font-size: 0.8rem;
+	padding: 0.2rem 0.7rem;
+	text-decoration: none;
+}
+
+.an-topics__count {
+	color: var(--an-muted);
+	font-size: 0.7rem;
+	margin-left: 0.35rem;
+}
+
+.an-footer__info {
+	color: var(--an-muted);
+	font-size: 0.8rem;
+	margin-top: 1.5rem;
+}
+
+/* Responsive --------------------------------------------------------- */
+
+@media (max-width: 900px) {
+
+	.an-home__columns,
+	.an-grid--sections,
+	.an-grid--archive,
+	.an-grid--related,
+	.an-ranking {
+		grid-template-columns: minmax(0, 1fr);
+	}
+
+	.an-grid--featured {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+
+	.an-grid--featured .an-card--lead {
+		grid-column: span 2;
+	}
+}
+
+@media (max-width: 560px) {
+
+	.an-grid--featured {
+		grid-template-columns: minmax(0, 1fr);
+	}
+
+	.an-grid--featured .an-card--lead {
+		grid-column: span 1;
+	}
+
+	.an-card--row {
+		grid-template-columns: minmax(0, 1fr);
+	}
+}
+
+/* Weather boards ----------------------------------------------------- */
+
+.an-weather-boards {
+	display: grid;
+	gap: 1rem;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	margin: 0 0 2rem;
+}
+
+.an-weather-board {
+	background: var(--an-sand);
+	border-radius: 4px;
+	padding: 0.75rem 1rem;
+}
+
+.an-weather-board p {
+	margin: 0 0 0.25rem;
+}
+
+.an-ranking__views {
+	color: var(--an-muted);
+	font-size: 0.75rem;
+	grid-column: 2;
+}
+
+.an-weather__empty {
+	color: var(--an-muted);
+}
+
+@media (max-width: 900px) {
+
+	.an-weather-boards {
+		grid-template-columns: minmax(0, 1fr);
+	}
+}

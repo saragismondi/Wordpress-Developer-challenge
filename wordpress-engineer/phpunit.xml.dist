@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<phpunit
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
+	bootstrap="wp-content/plugins/agronews-home/tests/bootstrap.php"
+	backupGlobals="false"
+	colors="true"
+	convertErrorsToExceptions="true"
+	convertNoticesToExceptions="true"
+	convertWarningsToExceptions="true"
+	beStrictAboutTestsThatDoNotTestAnything="false"
+	>
+	<testsuites>
+		<testsuite name="agronews-home">
+			<directory suffix=".php">wp-content/plugins/agronews-home/tests</directory>
+			<exclude>wp-content/plugins/agronews-home/tests/bootstrap.php</exclude>
+		</testsuite>
+	</testsuites>
+</phpunit>

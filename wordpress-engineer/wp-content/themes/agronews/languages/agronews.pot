@@ -1,0 +1,298 @@
+# Copyright (C) 2026 Braintly
+# This file is distributed under the GNU General Public License v2 or later.
+msgid ""
+msgstr ""
+"Project-Id-Version: AgroNews 1.0.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/theme/agronews\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2026-09-15T20:58:10+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.12.0\n"
+"X-Domain: agronews\n"
+
+#. Theme Name of the theme
+#: style.css
+msgid "AgroNews"
+msgstr ""
+
+#. Theme URI of the theme
+#: style.css
+msgid "https://www.agronews.example/theme"
+msgstr ""
+
+#. Description of the theme
+#: style.css
+msgid "Classic, build-free theme for the AgroNews agriculture news portal. Based on Underscores."
+msgstr ""
+
+#. Author of the theme
+#: style.css
+msgid "Braintly"
+msgstr ""
+
+#. Author URI of the theme
+#: style.css
+msgid "https://www.agronews.example"
+msgstr ""
+
+#: 404.php:17
+msgid "Oops! That page can&rsquo;t be found."
+msgstr ""
+
+#: 404.php:21
+msgid "It looks like nothing was found at this location. Maybe try one of the links below or a search?"
+msgstr ""
+
+#: 404.php:30
+msgid "Most Used Categories"
+msgstr ""
+
+#. translators: %1$s: smiley
+#: 404.php:48
+#, php-format
+msgid "Try looking in the monthly archives. %1$s"
+msgstr ""
+
+#: archive.php:38
+#: author.php:49
+#: category.php:85
+#: index.php:40
+msgid "Newer"
+msgstr ""
+
+#: archive.php:39
+#: author.php:50
+#: category.php:86
+#: index.php:41
+msgid "Older"
+msgstr ""
+
+#. translators: %s: author display name.
+#: author.php:22
+#, php-format
+msgid "Stories by %s"
+msgstr ""
+
+#. translators: 1: minimum temperature, 2: maximum temperature, both in Celsius.
+#: category.php:53
+#: template-parts/block-weather.php:53
+#, php-format
+msgid "%1$s° / %2$s°"
+msgstr ""
+
+#. translators: 1: title.
+#: comments.php:35
+#, php-format
+msgid "One thought on &ldquo;%1$s&rdquo;"
+msgstr ""
+
+#. translators: 1: comment count number, 2: title.
+#: comments.php:41
+#, php-format
+msgctxt "comments title"
+msgid "%1$s thought on &ldquo;%2$s&rdquo;"
+msgid_plural "%1$s thoughts on &ldquo;%2$s&rdquo;"
+msgstr[0] ""
+msgstr[1] ""
+
+#: comments.php:68
+msgid "Comments are closed."
+msgstr ""
+
+#. translators: 1: current year, 2: site name.
+#: footer.php:37
+#, php-format
+msgid "© %1$s %2$s. Fictional portal used for a technical exercise."
+msgstr ""
+
+#: header.php:27
+msgid "Skip to content"
+msgstr ""
+
+#: header.php:53
+#: header.php:54
+#: inc/setup.php:34
+msgid "Sections"
+msgstr ""
+
+#: inc/blocks.php:216
+msgid "Topics of the day"
+msgstr ""
+
+#: inc/setup.php:35
+msgid "Footer"
+msgstr ""
+
+#: inc/setup.php:88
+msgid "Sidebar"
+msgstr ""
+
+#: inc/setup.php:90
+msgid "Shown next to archives and single posts."
+msgstr ""
+
+#. translators: used between list items, there is a space after the comma
+#: inc/template-tags.php:61
+msgid ", "
+msgstr ""
+
+#: inc/template-tags.php:66
+msgid "Posted in"
+msgstr ""
+
+#. translators: used between list items, there is a space after the comma
+#: inc/template-tags.php:72
+msgctxt "list item separator"
+msgid ", "
+msgstr ""
+
+#: inc/template-tags.php:77
+msgid "Tagged"
+msgstr ""
+
+#. translators: %s: Name of current post. Only visible to screen readers
+#: inc/template-tags.php:87
+#: template-parts/content-page.php:39
+#, php-format
+msgid "Edit <span class=\"screen-reader-text\">%s</span>"
+msgstr ""
+
+#: inc/template-tags.php:217
+#: inc/template-tags.php:354
+msgid "X"
+msgstr ""
+
+#: inc/template-tags.php:218
+#: inc/template-tags.php:362
+msgid "LinkedIn"
+msgstr ""
+
+#: inc/template-tags.php:219
+msgid "Instagram"
+msgstr ""
+
+#: inc/template-tags.php:220
+msgid "Website"
+msgstr ""
+
+#: inc/template-tags.php:341
+msgid "Share"
+msgstr ""
+
+#: inc/template-tags.php:358
+msgid "Facebook"
+msgstr ""
+
+#: inc/template-tags.php:366
+msgid "WhatsApp"
+msgstr ""
+
+#: inc/template-tags.php:370
+msgid "Email"
+msgstr ""
+
+#. translators: %s: social network name.
+#: inc/template-tags.php:400
+#, php-format
+msgid "Share on %s"
+msgstr ""
+
+#. translators: %s: search query.
+#: search.php:21
+#, php-format
+msgid "Search Results for: %s"
+msgstr ""
+
+#: single.php:39
+#: template-parts/content-page.php:25
+#: template-parts/content.php:53
+msgid "Pages:"
+msgstr ""
+
+#: single.php:68
+msgid "Related stories"
+msgstr ""
+
+#: single.php:87
+msgid "Previous:"
+msgstr ""
+
+#: single.php:88
+msgid "Next:"
+msgstr ""
+
+#: template-parts/block-featured.php:30
+msgid "Featured"
+msgstr ""
+
+#: template-parts/block-latest.php:18
+msgid "Latest"
+msgstr ""
+
+#: template-parts/block-most-read.php:21
+msgid "Most read"
+msgstr ""
+
+#. translators: %s: number of readings of the story.
+#: template-parts/block-most-read.php:45
+#, php-format
+msgid "%s readings"
+msgstr ""
+
+#: template-parts/block-quotes.php:21
+msgid "Market quotes"
+msgstr ""
+
+#. translators: 1: currency symbol, 2: quoted value.
+#: template-parts/block-quotes.php:30
+#, php-format
+msgid "%1$s %2$s"
+msgstr ""
+
+#: template-parts/block-sections.php:19
+msgid "By section"
+msgstr ""
+
+#: template-parts/block-weather.php:14
+msgid "Weather"
+msgstr ""
+
+#. translators: %s: expected rainfall in millimetres.
+#: template-parts/block-weather.php:63
+#, php-format
+msgid "%s mm"
+msgstr ""
+
+#. translators: %s: date the forecast was produced.
+#: template-parts/block-weather.php:77
+#, php-format
+msgid "Updated %s"
+msgstr ""
+
+#: template-parts/content-none.php:14
+msgid "Nothing Found"
+msgstr ""
+
+#. translators: 1: link to WP admin new post page.
+#: template-parts/content-none.php:24
+#, php-format
+msgid "Ready to publish your first post? <a href=\"%1$s\">Get started here</a>."
+msgstr ""
+
+#: template-parts/content-none.php:37
+msgid "Sorry, but nothing matched your search terms. Please try again with some different keywords."
+msgstr ""
+
+#: template-parts/content-none.php:44
+msgid "It seems we can&rsquo;t find what you&rsquo;re looking for. Perhaps searching can help."
+msgstr ""
+
+#. translators: %s: Name of current post. Only visible to screen readers
+#: template-parts/content.php:40
+#, php-format
+msgid "Continue reading<span class=\"screen-reader-text\"> \"%s\"</span>"
+msgstr ""

@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<ruleset name="AgroNews">
+	<description>Coding standards for the AgroNews theme and plugin.</description>
+
+	<!-- Only our own code: WordPress core lives inside the container. -->
+	<file>wp-content</file>
+
+	<exclude-pattern>*/node_modules/*</exclude-pattern>
+	<exclude-pattern>*/vendor/*</exclude-pattern>
+	<exclude-pattern>*/languages/*</exclude-pattern>
+
+	<arg name="extensions" value="php"/>
+	<arg name="basepath" value="."/>
+	<arg name="colors"/>
+	<arg name="parallel" value="8"/>
+	<arg value="sp"/>
+
+	<!-- Fail the build on warnings too. -->
+	<config name="ignore_warnings_on_exit" value="0"/>
+	<config name="ignore_errors_on_exit" value="0"/>
+
+	<rule ref="WordPress-Extra"/>
+	<rule ref="WordPress-Docs"/>
+
+	<!-- Minimum supported versions. -->
+	<config name="minimum_wp_version" value="6.4"/>
+	<config name="testVersion" value="8.2-"/>
+	<rule ref="PHPCompatibilityWP"/>
+
+	<rule ref="WordPress.WP.I18n">
+		<properties>
+			<property name="text_domain" type="array">
+				<element value="agronews"/>
+				<element value="agronews-home"/>
+			</property>
+		</properties>
+	</rule>
+
+	<rule ref="WordPress.NamingConventions.PrefixAllGlobals">
+		<properties>
+			<property name="prefixes" type="array">
+				<element value="agronews"/>
+				<element value="AGRONEWS"/>
+			</property>
+		</properties>
+	</rule>
+
+	<!-- Test classes follow the WordPress test suite naming, not the theme's. -->
+	<rule ref="WordPress.Files.FileName">
+		<exclude-pattern>*/tests/*</exclude-pattern>
+	</rule>
+
+	<!-- The test bootstrap runs on the command line: there is nothing to escape. -->
+	<rule ref="WordPress.Security.EscapeOutput">
+		<exclude-pattern>*/tests/bootstrap.php</exclude-pattern>
+	</rule>
+</ruleset>

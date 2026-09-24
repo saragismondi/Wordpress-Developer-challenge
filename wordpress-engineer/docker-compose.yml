@@ -1,0 +1,104 @@
+name: agronews
+
+services:
+  db:
+    image: mariadb:10.11
+    restart: unless-stopped
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+    environment:
+      MARIADB_DATABASE: ${DB_NAME:-agronews}
+      MARIADB_USER: ${DB_USER:-agronews}
+      MARIADB_PASSWORD: ${DB_PASSWORD:-agronews}
+      MARIADB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-root}
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./docker/db/initdb.d:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 5s
+      timeout: 5s
+      retries: 60
+      start_period: 10s
+
+  wordpress:
+    image: wordpress:6.7-php8.2-apache
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+      edge:
+        condition: service_started
+    ports:
+      - "${WP_PORT:-8088}:80"
+    environment:
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_NAME: ${DB_NAME:-agronews}
+      WORDPRESS_DB_USER: ${DB_USER:-agronews}
+      WORDPRESS_DB_PASSWORD: ${DB_PASSWORD:-agronews}
+      WORDPRESS_TABLE_PREFIX: ${DB_PREFIX:-wp_}
+      WORDPRESS_DEBUG: ${WP_DEBUG:-0}
+      # Baked into wp-config.php by the image entrypoint on first boot.
+      # SAVEQUERIES has to be defined before wpdb runs its first query, so it
+      # cannot be turned on from the mu-plugin alone. WP-CLI is excluded on
+      # purpose: logging every query while seeding 2k posts blows up memory.
+      WORDPRESS_CONFIG_EXTRA: |
+        define( 'AN_BENCH', '${AN_BENCH:-1}' === '1' );
+        if ( AN_BENCH && ! defined( 'WP_CLI' ) && ! defined( 'SAVEQUERIES' ) ) {
+            define( 'SAVEQUERIES', true );
+        }
+    volumes:
+      - wp_core:/var/www/html
+      - ./docker/apache/agronews.conf:/etc/apache2/conf-enabled/agronews.conf:ro
+      - ./docker/php/agronews.ini:/usr/local/etc/php/conf.d/agronews.ini:ro
+      - ./docker/edge/certs:/etc/edge/certs:ro
+      - ./wp-content/themes/agronews:/var/www/html/wp-content/themes/agronews
+      - ./wp-content/plugins/agronews-home:/var/www/html/wp-content/plugins/agronews-home
+      - ./wp-content/mu-plugins:/var/www/html/wp-content/mu-plugins
+
+  # Edge cache simulation.
+  edge:
+    image: openresty/openresty:alpine
+    restart: unless-stopped
+    volumes:
+      - ./docker/edge/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./docker/edge/certs:/etc/edge/certs:ro
+      - ./wp-content/themes/agronews/json/weather:/var/www/agronews/wp-content/themes/agronews/json/weather:ro
+    networks:
+      default:
+        aliases:
+          - www.agronews.example
+          - agronews.example
+
+  # Runs as uid 33 (www-data in the Debian-based WordPress image) so every file
+  # WP-CLI writes into the shared wp_core volume stays readable by Apache.
+  wpcli:
+    image: wordpress:cli-php8.2
+    user: "33:33"
+    depends_on:
+      db:
+        condition: service_healthy
+      wordpress:
+        condition: service_started
+    environment:
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_NAME: ${DB_NAME:-agronews}
+      WORDPRESS_DB_USER: ${DB_USER:-agronews}
+      WORDPRESS_DB_PASSWORD: ${DB_PASSWORD:-agronews}
+      WORDPRESS_TABLE_PREFIX: ${DB_PREFIX:-wp_}
+      HOME: /tmp
+      WP_CLI_CACHE_DIR: /tmp/wp-cli-cache
+    volumes:
+      - wp_core:/var/www/html
+      - ./wp-content/themes/agronews:/var/www/html/wp-content/themes/agronews
+      - ./wp-content/plugins/agronews-home:/var/www/html/wp-content/plugins/agronews-home
+      - ./wp-content/mu-plugins:/var/www/html/wp-content/mu-plugins
+      - ./:/repo
+      - wp_tests:/tmp/wp-tests
+    working_dir: /var/www/html
+
+volumes:
+  db_data:
+  wp_core:
+  wp_tests:

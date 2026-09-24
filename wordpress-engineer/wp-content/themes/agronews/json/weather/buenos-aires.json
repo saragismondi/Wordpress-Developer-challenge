@@ -1,0 +1,48 @@
+{
+	"city": "Buenos Aires",
+	"region": "Pampa Húmeda",
+	"updated": "2026-09-01",
+	"source": "AgroNews fictional forecast",
+	"days": [
+		{
+			"date": "2026-09-01",
+			"summary": "Clear",
+			"min_c": 9,
+			"max_c": 21,
+			"rain_mm": 0,
+			"wind_kph": 14
+		},
+		{
+			"date": "2026-09-02",
+			"summary": "Partly cloudy",
+			"min_c": 11,
+			"max_c": 23,
+			"rain_mm": 0.4,
+			"wind_kph": 18
+		},
+		{
+			"date": "2026-09-03",
+			"summary": "Showers",
+			"min_c": 13,
+			"max_c": 19,
+			"rain_mm": 12.6,
+			"wind_kph": 27
+		},
+		{
+			"date": "2026-09-04",
+			"summary": "Overcast",
+			"min_c": 10,
+			"max_c": 18,
+			"rain_mm": 2.1,
+			"wind_kph": 22
+		},
+		{
+			"date": "2026-09-05",
+			"summary": "Clear",
+			"min_c": 8,
+			"max_c": 20,
+			"rain_mm": 0,
+			"wind_kph": 11
+		}
+	]
+}

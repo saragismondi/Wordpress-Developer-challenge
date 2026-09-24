@@ -1,0 +1,36 @@
+{
+	"name": "braintly/challenge-wordpress",
+	"description": "AgroNews: dockerized WordPress used as the base of a hiring exercise.",
+	"type": "project",
+	"license": "GPL-2.0-or-later",
+	"require": {
+		"php": ">=8.2"
+	},
+	"require-dev": {
+		"squizlabs/php_codesniffer": "^3.10",
+		"wp-coding-standards/wpcs": "^3.1",
+		"phpcompatibility/phpcompatibility-wp": "^2.1",
+		"dealerdirect/phpcodesniffer-composer-installer": "^1.0",
+		"phpunit/phpunit": "^9.6",
+		"yoast/phpunit-polyfills": "^2.0"
+	},
+	"config": {
+		"platform": {
+			"php": "8.2"
+		},
+		"allow-plugins": {
+			"dealerdirect/phpcodesniffer-composer-installer": true
+		},
+		"sort-packages": true
+	},
+	"scripts": {
+		"lint": "phpcs",
+		"lint:fix": "phpcbf",
+		"test": "phpunit"
+	},
+	"scripts-descriptions": {
+		"lint": "Runs PHP_CodeSniffer over wp-content.",
+		"lint:fix": "Applies the fixes PHP_CodeSniffer can apply on its own.",
+		"test": "Runs the PHPUnit suite (needs the WordPress test library, see bin/test.sh)."
+	}
+}
