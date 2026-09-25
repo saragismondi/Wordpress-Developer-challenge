@@ -29,7 +29,7 @@ if ( empty( $agronews_quotes ) ) {
 						/* translators: 1: currency symbol, 2: quoted value. */
 						esc_html__( '%1$s %2$s', 'agronews' ),
 						esc_html( $agronews_quote['currency'] ),
-						esc_html( number_format( $agronews_quote['value'], 0, ',', '.' ) )
+						esc_html( number_format( (float) $agronews_quote['value'], 0, ',', '.' ) )
 					);
 					?>
 				</span>

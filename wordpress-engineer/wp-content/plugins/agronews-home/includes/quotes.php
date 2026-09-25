@@ -60,8 +60,8 @@ function agronews_home_get_quote_keys() {
 /**
  * Returns the quotes ready to be rendered by the theme.
  *
- * Quotes left empty in the settings are skipped, so the bar never shows a
- * blank slot.
+ * Quotes left empty in the settings, or holding something that is not a
+ * number, are skipped, so the bar never shows a blank or broken slot.
  *
  * @return array<int,array<string,mixed>> List of key, label, currency and value.
  */
@@ -72,7 +72,9 @@ function agronews_home_get_quotes() {
 	foreach ( agronews_home_get_quote_definitions() as $key => $definition ) {
 		$value = isset( $settings['quotes'][ $key ] ) ? $settings['quotes'][ $key ] : '';
 
-		if ( '' === $value ) {
+		// Values stored before input was validated may not be numeric: skip
+		// them rather than let number_format() throw a TypeError on the home.
+		if ( '' === $value || ! is_numeric( $value ) ) {
 			continue;
 		}
 
