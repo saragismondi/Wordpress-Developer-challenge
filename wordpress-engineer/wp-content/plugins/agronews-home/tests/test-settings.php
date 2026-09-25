@@ -109,6 +109,56 @@ class Test_AgroNews_Home_Settings extends WP_UnitTestCase {
 	}
 
 	/**
+	 * Quotes typed the Argentine way are normalized before they are stored,
+	 * and anything that is not a number keeps the previous value.
+	 *
+	 * @return void
+	 */
+	public function test_localized_quotes_are_normalized_and_invalid_ones_rejected() {
+		update_option(
+			AGRONEWS_HOME_OPTION,
+			agronews_home_sanitize_settings( array( 'quotes' => array( 'usd' => '1040.25' ) ) )
+		);
+
+		$sanitized = agronews_home_sanitize_settings(
+			array(
+				'quotes' => array(
+					'soy'    => '1.234,50',
+					'wheat'  => '238,1',
+					'corn'   => '1.234',
+					'cattle' => '2450',
+					'usd'    => 'N/A',
+				),
+			)
+		);
+
+		$this->assertSame( '1234.50', $sanitized['quotes']['soy'], 'Dots group thousands, the comma is the decimal separator.' );
+		$this->assertSame( '238.1', $sanitized['quotes']['wheat'] );
+		$this->assertSame( '1234', $sanitized['quotes']['corn'] );
+		$this->assertSame( '2450', $sanitized['quotes']['cattle'] );
+		$this->assertSame( '1040.25', $sanitized['quotes']['usd'], 'An invalid quote keeps the previous value.' );
+	}
+
+	/**
+	 * The quotes bar never breaks on a value stored before validation existed.
+	 *
+	 * @return void
+	 */
+	public function test_non_numeric_stored_quotes_are_skipped_by_the_read_api() {
+		update_option(
+			AGRONEWS_HOME_OPTION,
+			array(
+				'quotes' => array(
+					'soy'   => '512.35',
+					'wheat' => 'USD 1.234',
+				),
+			)
+		);
+
+		$this->assertSame( array( 'soy' ), wp_list_pluck( agronews_home_get_quotes(), 'key' ) );
+	}
+
+	/**
 	 * The read API returns the seven quotes in order, skipping the empty ones.
 	 *
 	 * @return void
