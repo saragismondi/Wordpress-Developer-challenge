@@ -341,7 +341,7 @@ function agronews_home_render_quote_field( $args ) {
 	/>
 	<span class="description">
 		<?php echo esc_html( $currency ); ?>
-		<?php esc_html_e( 'Ej: 285000', 'agronews-home' ); ?>
+		<?php esc_html_e( 'Example: 1.234,50', 'agronews-home' ); ?>
 	</span>
 	<?php
 }
@@ -398,13 +398,76 @@ function agronews_home_sanitize_settings( $input ) {
 
 	$raw_quotes = isset( $input['quotes'] ) && is_array( $input['quotes'] ) ? $input['quotes'] : array();
 
+	$definitions = agronews_home_get_quote_definitions();
+
 	foreach ( agronews_home_get_quote_keys() as $key ) {
 		$raw = isset( $raw_quotes[ $key ] ) && is_scalar( $raw_quotes[ $key ] )
 			? (string) $raw_quotes[ $key ]
 			: '';
 
-		$output['quotes'][ $key ] = sanitize_text_field( $raw );
+		$parsed = agronews_home_parse_quote( $raw );
+
+		if ( null === $parsed ) {
+			// Keep the last valid value instead of storing something the bar cannot format.
+			$output['quotes'][ $key ] = $current['quotes'][ $key ];
+
+			if ( function_exists( 'add_settings_error' ) ) {
+				add_settings_error(
+					AGRONEWS_HOME_OPTION,
+					'agronews-home-invalid-quote-' . $key,
+					sprintf(
+						/* translators: 1: quote label, 2: value typed by the editor. */
+						__( '%1$s: "%2$s" is not a valid number, the previous value was kept. Use a format like 1.234,50 or 1234.50.', 'agronews-home' ),
+						esc_html( $definitions[ $key ]['label'] ),
+						esc_html( sanitize_text_field( $raw ) )
+					)
+				);
+			}
+
+			continue;
+		}
+
+		$output['quotes'][ $key ] = $parsed;
 	}
 
 	return $output;
+}
+
+/**
+ * Normalizes a quote typed by an editor into a plain decimal string.
+ *
+ * The market desk writes numbers the Argentine way (1.234,50), while older
+ * values and the seeder use a dot as the decimal separator (512.35). Both are
+ * accepted; anything ambiguous or non numeric is rejected rather than guessed.
+ *
+ * - "1.234,50" and "1.234" => "1234.50" and "1234" (dots group thousands).
+ * - "1234,5"               => "1234.5" (comma is the decimal separator).
+ * - "512.35"               => "512.35" (dot decimal, no grouping).
+ *
+ * @param string $raw Raw value from the settings form.
+ * @return string|null Normalized value, '' for an empty field, null when invalid.
+ */
+function agronews_home_parse_quote( $raw ) {
+	$value = str_replace( array( ' ', "\u{00A0}" ), '', sanitize_text_field( (string) $raw ) );
+
+	if ( '' === $value ) {
+		return '';
+	}
+
+	// Thousands grouped with dots, optional decimal comma: 1.234 or 1.234,50.
+	if ( preg_match( '/^\d{1,3}(?:\.\d{3})+(?:,\d+)?$/', $value ) ) {
+		return str_replace( array( '.', ',' ), array( '', '.' ), $value );
+	}
+
+	// Decimal comma without grouping: 1234,50.
+	if ( preg_match( '/^\d+,\d+$/', $value ) ) {
+		return str_replace( ',', '.', $value );
+	}
+
+	// Plain number with an optional decimal dot: 1234 or 512.35.
+	if ( preg_match( '/^\d+(?:\.\d+)?$/', $value ) ) {
+		return $value;
+	}
+
+	return null;
 }
