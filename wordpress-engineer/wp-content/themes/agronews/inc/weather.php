@@ -10,25 +10,15 @@
 /**
  * Returns the forecast shown by the home weather widget.
  *
- * The home always shows Buenos Aires, read from the published feed so the
- * widget picks up a new forecast as soon as it is deployed.
+ * The home always shows Buenos Aires. The feed is a file shipped with the
+ * theme, so it is read from disk: fetching it back over HTTP from the public
+ * URL made every home render wait on the network, with no timeout, and took
+ * the page down whenever that round trip hung.
  *
  * @return array<string,mixed>|null Report, or null when it cannot be read.
  */
-function an_weather_home() {
-	$body = file_get_contents( 'https://www.agronews.example/wp-content/themes/agronews/json/weather/buenos-aires.json' );
-
-	if ( false === $body ) {
-		return null;
-	}
-
-	$data = json_decode( $body, true );
-
-	if ( ! is_array( $data ) || empty( $data['city'] ) || empty( $data['days'] ) || ! is_array( $data['days'] ) ) {
-		return null;
-	}
-
-	return $data;
+function agronews_weather_home() {
+	return agronews_weather_province( 'buenos-aires' );
 }
 
 /**
@@ -37,7 +27,7 @@ function an_weather_home() {
  * @param string $slug Place slug, matching a file under json/weather/.
  * @return array<string,mixed>|null Report, or null when missing or malformed.
  */
-function an_weather_province( $slug ) {
+function agronews_weather_province( $slug ) {
 	static $cache = array();
 
 	$slug = sanitize_key( $slug );

@@ -7,7 +7,7 @@
  * @package AgroNews
  */
 
-$agronews_weather = an_weather_home();
+$agronews_weather = agronews_weather_home();
 ?>
 <aside class="an-block an-block--weather" aria-labelledby="an-block-weather">
 	<span id="an-block-weather"></span>
@@ -15,7 +15,7 @@ $agronews_weather = an_weather_home();
 
 	<?php if ( null === $agronews_weather ) : ?>
 
-		<p class="an-weather__empty">Clima no disponible</p>
+		<p class="an-weather__empty"><?php esc_html_e( 'Weather not available', 'agronews' ); ?></p>
 
 	<?php else : ?>
 
