@@ -140,17 +140,19 @@ class Test_AgroNews_Home_Settings extends WP_UnitTestCase {
 	}
 
 	/**
-	 * The quotes bar never breaks on a value stored before validation existed.
+	 * The quotes bar never breaks on, or shows, a value stored before
+	 * validation existed: non-numeric and negative values are skipped.
 	 *
 	 * @return void
 	 */
-	public function test_non_numeric_stored_quotes_are_skipped_by_the_read_api() {
+	public function test_invalid_stored_quotes_are_skipped_by_the_read_api() {
 		update_option(
 			AGRONEWS_HOME_OPTION,
 			array(
 				'quotes' => array(
 					'soy'   => '512.35',
 					'wheat' => 'USD 1.234',
+					'corn'  => '-5',
 				),
 			)
 		);
