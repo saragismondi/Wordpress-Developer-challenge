@@ -106,13 +106,20 @@ function agronews_get_section_category_ids() {
  * @return array<string,mixed> Query arguments.
  */
 function agronews_get_block_query_args( $block, $category_id = 0 ) {
+	/*
+	 * Every card prints the primary category, the thumbnail and the view
+	 * count, so the term and meta caches are primed in one query per block
+	 * instead of one query per card. Blocks are never paginated, so the
+	 * SQL_CALC_FOUND_ROWS count is skipped.
+	 */
 	$args = array(
 		'post_type'              => 'post',
 		'post_status'            => 'publish',
 		'posts_per_page'         => agronews_get_block_size( $block ),
 		'ignore_sticky_posts'    => true,
-		'update_post_term_cache' => false,
-		'update_post_meta_cache' => false,
+		'no_found_rows'          => true,
+		'update_post_term_cache' => true,
+		'update_post_meta_cache' => true,
 	);
 
 	switch ( $block ) {
@@ -160,9 +167,13 @@ function agronews_get_block_query_args( $block, $category_id = 0 ) {
  * @return WP_Query Query object, already executed.
  */
 function agronews_get_block_query( $block, $category_id = 0, $overrides = array() ) {
-	$args = array_merge( agronews_get_block_query_args( $block, $category_id ), (array) $overrides );
+	$args  = array_merge( agronews_get_block_query_args( $block, $category_id ), (array) $overrides );
+	$query = new WP_Query( $args );
 
-	return new WP_Query( $args );
+	// One query for every featured image of the block (posts and their alt text).
+	update_post_thumbnail_cache( $query );
+
+	return $query;
 }
 
 /**
@@ -186,15 +197,20 @@ function agronews_get_related_query( $post_id, $number = 4 ) {
 		'post__not_in'           => array( $post_id ),
 		'ignore_sticky_posts'    => true,
 		'orderby'                => 'rand',
-		'update_post_term_cache' => false,
-		'update_post_meta_cache' => false,
+		'no_found_rows'          => true,
+		'update_post_term_cache' => true,
+		'update_post_meta_cache' => true,
 	);
 
 	if ( ! empty( $categories ) ) {
 		$args['cat'] = (int) $categories[0];
 	}
 
-	return new WP_Query( $args );
+	$query = new WP_Query( $args );
+
+	update_post_thumbnail_cache( $query );
+
+	return $query;
 }
 
 /**
