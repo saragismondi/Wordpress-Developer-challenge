@@ -330,7 +330,7 @@ function agronews_home_render_quote_field( $args ) {
 	$key      = isset( $args['key'] ) ? (string) $args['key'] : '';
 	$currency = isset( $args['currency'] ) ? (string) $args['currency'] : '';
 	$quotes   = (array) agronews_home_get_setting( 'quotes', array() );
-	$value    = isset( $quotes[ $key ] ) ? $quotes[ $key ] : '';
+	$value    = isset( $quotes[ $key ] ) ? agronews_home_format_quote_for_input( $quotes[ $key ] ) : '';
 	?>
 	<input
 		type="text"
@@ -375,6 +375,16 @@ function agronews_home_sanitize_category( $value ) {
  * @return array<string,mixed> Sanitized settings.
  */
 function agronews_home_sanitize_settings( $input ) {
+	// On the very first save, update_option() falls back to add_option(), and
+	// WordPress runs this callback a second time on the value it just returned.
+	// Parsing that value again would read 238.100 as thousands, so it is
+	// returned untouched.
+	static $last_output = null;
+
+	if ( null !== $last_output && $input === $last_output ) {
+		return $input;
+	}
+
 	$current = agronews_home_get_settings();
 	$output  = agronews_home_default_settings();
 
@@ -430,7 +440,23 @@ function agronews_home_sanitize_settings( $input ) {
 		$output['quotes'][ $key ] = $parsed;
 	}
 
+	$last_output = $output;
+
 	return $output;
+}
+
+/**
+ * Formats a stored quote for the settings form, with a decimal comma.
+ *
+ * Stored values use a decimal dot (238.100 means 238,1). Shown as is, the
+ * parser would read them back as thousands on the next save, so the form
+ * shows them in the same format it expects: 238,100 or 1234,50.
+ *
+ * @param string $value Stored value, as returned by agronews_home_parse_quote().
+ * @return string Value ready to be printed in the input.
+ */
+function agronews_home_format_quote_for_input( $value ) {
+	return str_replace( '.', ',', (string) $value );
 }
 
 /**
