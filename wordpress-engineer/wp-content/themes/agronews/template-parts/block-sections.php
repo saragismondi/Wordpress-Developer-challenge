@@ -22,17 +22,14 @@ if ( empty( $agronews_categories ) ) {
 		<?php foreach ( $agronews_categories as $agronews_category_id ) : ?>
 			<?php
 			$agronews_term = get_term( $agronews_category_id, 'category' );
-			$agronews_top  = agronews_get_block_query( 'section', $agronews_category_id, array( 'posts_per_page' => 1 ) );
-			$agronews_rest = agronews_get_block_query(
-				'section',
-				$agronews_category_id,
-				array(
-					'posts_per_page' => 3,
-					'offset'         => 1,
-				)
-			);
 
-			if ( ! $agronews_term instanceof WP_Term || ! $agronews_top->have_posts() ) {
+			if ( ! $agronews_term instanceof WP_Term ) {
+				continue;
+			}
+
+			$agronews_query = agronews_get_block_query( 'section', $agronews_category_id );
+
+			if ( ! $agronews_query->have_posts() ) {
 				continue;
 			}
 			?>
@@ -45,21 +42,8 @@ if ( empty( $agronews_categories ) ) {
 
 				<div class="an-section__items">
 					<?php
-					while ( $agronews_top->have_posts() ) :
-						$agronews_top->the_post();
-
-						agronews_render_card(
-							array(
-								'category' => false,
-								'class'    => 'an-card--compact',
-							)
-						);
-					endwhile;
-
-					wp_reset_postdata();
-
-					while ( $agronews_rest->have_posts() ) :
-						$agronews_rest->the_post();
+					while ( $agronews_query->have_posts() ) :
+						$agronews_query->the_post();
 
 						agronews_render_card(
 							array(
