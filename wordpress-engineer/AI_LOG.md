@@ -1,57 +1,88 @@
-# AI_LOG
+Herramienta: Claude Code (terminal), con otros modelos para el code review y la revisión de la documentación.
 
-**Herramienta:** Claude Code (terminal), con un segundo modelo para el code review.
+Cómo la usé: la IA leyó el código, ejecutó y verificó; las decisiones de alcance, prioridad y qué se arregla
+o se documenta las tomé yo. Abajo va una selección de mis prompts, textuales y con fecha, extraídos de las
+transcripciones de Claude Code. No incluyo las transcripciones completas ni las respuestas de la IA: omití lo
+que no es trabajo técnico sobre el challenge. No usé CLAUDE.md en el repo; las reglas de trabajo quedaron en la
+memoria de la herramienta.
 
-**Cómo la usé:** la IA ejecutó y verificó; las decisiones de alcance, prioridad y qué se arregla o se documenta las tomé yo. Abajo están los prompts que fui usando en cada fase.
+Abajo va una selección de mis prompts, resumidos, con fecha, extraídos de las transcripciones de Claude Code.
 
-## Reglas que le fijé desde el inicio
+----------------------------------------------------------------------
+1. ARRANQUE Y REGLAS DE TRABAJO — 24/09
+----------------------------------------------------------------------
 
-> "Antes de arrancar: todo local. No toques git, ni commits, ni ramas, ni push, nada remoto, eso lo hago yo. No apliques ningún cambio sin que te dé el ok. Y si afirmás algo, mostrame dónde está en el código o medilo, no me digas 'probablemente'. Dame respuestas exactas, no ambiguas."
+[24/09 19:39]
+> LEE EL RESPOSITORIO, SOLO LEELO, [...]
 
-## Prompts por fase
+[24/09 20:02]
+> [...] VOY A APROBAR CADA COSA QUE PONER EN EL PLAN. DAME EL PLAN DE NUEVO [...]
 
-**1. Entender el producto (24/09)**
+[24/09 20:04]
+> [...] NO VAMOS A HACER NINGUN COMMIT , NADA AUN EN REMOTO,  TODO SE TRABAJA LOCAL Y CONTROLADO POR MI [...]  AL FINAL DE TODO SE ENTREGA REMOTO
 
-> "Leé la consigna, el tema, el plugin y el seeder. No cambies nada todavía. Quiero entender cómo se arma la home, qué consulta hace cada bloque y de qué depende cada cosa (opciones, JSON, caché)."
 
-**2. Entender las tareas y priorizar**
+----------------------------------------------------------------------
+2. VERIFICACIÓN: DOCUMENTO DE CHEQUEO Y CODE REVIEW CON OTRO MODELO — 24/09
+----------------------------------------------------------------------
 
-> "Ok, ahora listame todos los problemas que ves, pero ordenados. Ahora filtra por cuánto le pegan al usuario y a la estabilidad, sobre todo lo de 'a veces se cae'. No me los ordenes por lo fácil que son de arreglar. Para cada uno decime dónde está en el código y si se repite en otros files."
+[24/09 20:08]
+> [...] ¿ME  ARMAS UN DOCU PARA CHEQUEAR LOS CAMBIOS QUE HICISTE CON MIS OJOS Y VER SI ESTA OK, ADEMAS DE LOS TEST QUE HAYA
 
-> "De esa lista estos los arreglamos, algunos issues los vamos a  fixiar y otros van documentados en FINDINGS.md. Hace una review por si se se me escapa algo."
+[24/09 20:09]
+> VAMOS A PONER OTRO MODELO QUE TE HAGA CODE REVIEW... 
 
-**3. Revisar specs y armar el plan**
+[24/09 20:12]
+> PORQUE NO CONSIDERASTE QE HACER UN QUERY DE 200 LLAMADOS ES IGUAL DE DENSA O LENTA ¿COMO LO ESTAS PENSANDO?
 
-> "Antes de tocar código revisá cómo funcionan WP_Query, la Settings API y el object cache en esto que estamos haciendo. Armame un plan en pasos cortos, que cada uno se pueda verificar solo. Y corré bin/bench.sh ahora así tenemos la línea base antes de cambiar nada."
 
-**4. Implementar y medir**
+----------------------------------------------------------------------
+3. ALCANCE: QUÉ SE ARREGLA Y QUÉ SE DOCUMENTA — 24/09
+----------------------------------------------------------------------
 
-> "Vamos con el paso 1 nomás. Mostrame el diff antes de aplicarlo."
+[24/09 21:19]
+> no renombres las funciones, trae problemas - solo documenta en finding
 
-> "Aplicalo. Corré bin/test.sh y bin/lint.sh, después bench y comparalo con la línea base. Y compará el HTML de la home antes y después, tiene que dar idéntico byte a byte. Si algo cambia avisame, no lo 'arregles' por tu cuenta. guarda en memoria que es importante que no arrastres errores hasta el push, por eso primero review, y yo reviso y luego ejecutas y reviso again"
+[24/09 21:24]
+> [...] pimero veo una scroll horizontal, eso est mal seguro...
 
-(y así con cada paso)
+[24/09 21:27]
+> si, levantá el original para comparar
 
-**5. Testing manual (25/09)**
+[24/09 21:30]
+> si, avanzá pero solo documentar
 
-> "Armame una guía de testing manual para revisar en el navegador: la home completa, el admin de cotizaciones probando 1.234,50, N/A y el campo vacío, qué pasa si el clima se cae (voy a renombrar el JSON) y las notas relacionadas. Pasos concretos y espectativa concreta de cada uno."
 
-**6. Code review con otro modelo**
+[24/09 21:51]
+> DOCUMENTA LOS NUEVOS FINDINGS  PERO NO LOS ARREGLES
 
-> "Revisá estos cambios en modo solo lectura, no edites nada. Hacé de tech lead escéptico: ¿cuánto cuestan las queries si no hay object cache? ¿Aguanta 3M visitas por mes? ¿Hay riesgo de estampida cuando expira la caché? ¿Hay algo sin escapar? ¿Me fui de alcance? Numerá los hallazgos y clasifica po severidad y yo te digo que fixeamos y que no."
 
-> (de vuelta al modelo principal) "Te paso el review. Para cada hallazgo decime si es real o no, mostrando el código. Después decido yo qué se arregla."
+----------------------------------------------------------------------
+4. TESTING MANUAL Y CONTROL CONTRA LA CONSIGNA — 25/09
+----------------------------------------------------------------------
 
-**7. Decisiones sobre el review**
+[25/09 17:53]
+> ok al 1 y el 2 
 
-> "Del code review arreglá solo el aviso de error de cotizaciones, que muestra el texto del editor sin escaparlo. Los otros tres (precios con 3 decimales, negativos viejos y la página de Clima sin mensaje si fallan los 3 pronósticos) no los toques: dejalos documentados en FINDINGS.md con el porqué, son casos raros y quedan fuera del alcance."
 
-**8. Cierre contra el checklist del PR**
+[25/09 19:02]
+> [...] COSAS QUE QUEDARON SIN TILDAR ¿LOS PIDE A TODOS OBLIGATORIOS EL ASSEMENT? 
 
-> "Revisemos el checklist del template ítem por ítem. Arreglá el prefijo de las funciones de clima y el texto sin traducir; el test de queries queda documentado."
+[25/09 19:05]
+> ok, hacé la 1 y la 3 
 
-**9. Armar el historial de commits**
+----------------------------------------------------------------------
+5. REVISIÓN DE LA DOCUMENTACIÓN CON OTROS MODELOS — 25 y 26/09
+----------------------------------------------------------------------
 
-> "Trabajé todo en local y verificado. Ahora armame el plan de commits: agrupá los cambios por tema, un commit atómico por cada uno, con conventional commits, y que ningún commit deje el sitio roto si alguien hace checkout en ese punto. Los commits, el push y el PR los ejecuto yo."
+[25/09 23:08]
+> AHORA REVISA QUE FINDINGS Y IA_LOG--- SEAN CONSISTENTES, COHERENTES Y NO HAYA CONTRADICCION O AMBUGUEDAD
 
-Todo el código fue revisado, testeado y medido manualmente antes de entregarlo.
+[26/09 00:07]
+> MIRA EL CODE REVIEW QUE TE HIZO CODEX
+
+[26/09 00:37]  (las 4 reglas las propuso la IA; las adopté y las fijé para todos mis proyectos)
+> PARA QUE NO REPITAS NUNCA MAS ESTO EN NINGUN PROYECTO GUARDA EN MEMORIA: [...] 1. Cada recomendación mía tiene que traer 4 datos, o no vale: - Qué pide la consigna, con la cita textual. - Evidencia: qué archivo leí o qué comando ejecuté, con el resultado. - Costo y riesgo. - Verificado sí/no. [...] 2. No cambio una recomendación sin un dato nuevo [...] 3. Vos decidís. [...] 4. Alcance congelado. [...] Cualquier review nuevo (de Codex o de otra IA) se contrasta con este mismo formato antes de tocar algo.
+
+
+Todo el código fue revisado por mí, testeado y medido antes de entregarlo.
