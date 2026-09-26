@@ -35,7 +35,7 @@ get_header();
 				<div class="an-weather-boards">
 					<?php foreach ( array( 'buenos-aires', 'cordoba', 'santa-fe' ) as $agronews_place ) : ?>
 						<?php
-						$agronews_board = an_weather_province( $agronews_place );
+						$agronews_board = agronews_weather_province( $agronews_place );
 
 						if ( null === $agronews_board ) {
 							continue;

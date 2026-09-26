@@ -2,23 +2,15 @@
 /**
  * Home block: Featured.
  *
- * The lead story is rendered large and the other four as regular cards, so
- * each list is fetched with the shape it needs.
+ * The lead story is rendered large and the other four as regular cards. One
+ * query fetches all five; the first post of the loop becomes the lead.
  *
  * @package AgroNews
  */
 
-$agronews_lead = agronews_get_block_query( 'featured', 0, array( 'posts_per_page' => 1 ) );
-$agronews_rest = agronews_get_block_query(
-	'featured',
-	0,
-	array(
-		'posts_per_page' => 4,
-		'offset'         => 1,
-	)
-);
+$agronews_query = agronews_get_block_query( 'featured' );
 
-if ( ! $agronews_lead->have_posts() ) {
+if ( ! $agronews_query->have_posts() ) {
 	return;
 }
 
@@ -31,24 +23,20 @@ $agronews_link     = $agronews_category > 0 ? (string) get_category_link( $agron
 
 	<div class="an-grid an-grid--featured">
 		<?php
-		while ( $agronews_lead->have_posts() ) :
-			$agronews_lead->the_post();
+		while ( $agronews_query->have_posts() ) :
+			$agronews_query->the_post();
 
-			agronews_render_card(
-				array(
-					'size'    => 'large',
-					'excerpt' => true,
-					'class'   => 'an-card--lead',
-				)
-			);
-		endwhile;
-
-		wp_reset_postdata();
-
-		while ( $agronews_rest->have_posts() ) :
-			$agronews_rest->the_post();
-
-			agronews_render_card();
+			if ( 0 === $agronews_query->current_post ) {
+				agronews_render_card(
+					array(
+						'size'    => 'large',
+						'excerpt' => true,
+						'class'   => 'an-card--lead',
+					)
+				);
+			} else {
+				agronews_render_card();
+			}
 		endwhile;
 
 		wp_reset_postdata();

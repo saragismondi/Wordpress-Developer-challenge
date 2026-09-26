@@ -109,6 +109,105 @@ class Test_AgroNews_Home_Settings extends WP_UnitTestCase {
 	}
 
 	/**
+	 * Quotes typed the Argentine way are normalized before they are stored,
+	 * and anything that is not a number keeps the previous value.
+	 *
+	 * @return void
+	 */
+	public function test_localized_quotes_are_normalized_and_invalid_ones_rejected() {
+		update_option(
+			AGRONEWS_HOME_OPTION,
+			agronews_home_sanitize_settings( array( 'quotes' => array( 'usd' => '1040.25' ) ) )
+		);
+
+		$sanitized = agronews_home_sanitize_settings(
+			array(
+				'quotes' => array(
+					'soy'    => '1.234,50',
+					'wheat'  => '238,1',
+					'corn'   => '1.234',
+					'cattle' => '2450',
+					'usd'    => 'N/A',
+				),
+			)
+		);
+
+		$this->assertSame( '1234.50', $sanitized['quotes']['soy'], 'Dots group thousands, the comma is the decimal separator.' );
+		$this->assertSame( '238.1', $sanitized['quotes']['wheat'] );
+		$this->assertSame( '1234', $sanitized['quotes']['corn'] );
+		$this->assertSame( '2450', $sanitized['quotes']['cattle'] );
+		$this->assertSame( '1040.25', $sanitized['quotes']['usd'], 'An invalid quote keeps the previous value.' );
+	}
+
+	/**
+	 * An invalid quote registers a settings error that names the field and
+	 * shows the typed value escaped.
+	 *
+	 * @return void
+	 */
+	public function test_invalid_quote_registers_an_escaped_settings_error() {
+		agronews_home_sanitize_settings( array( 'quotes' => array( 'soy' => 'N/A & "x"' ) ) );
+
+		$errors = wp_list_filter( get_settings_errors( AGRONEWS_HOME_OPTION ), array( 'code' => 'agronews-home-invalid-quote-soy' ) );
+		$this->assertCount( 1, $errors, 'An invalid quote registers exactly one error.' );
+
+		$message = reset( $errors )['message'];
+		$this->assertStringContainsString( 'N/A &amp; &quot;x&quot;', $message, 'The typed value is escaped.' );
+	}
+
+	/**
+	 * Saving the form again without touching a quote keeps its value: the
+	 * form shows it in the format the parser reads back to the same number.
+	 *
+	 * @return void
+	 */
+	public function test_saving_the_form_again_keeps_the_stored_quotes() {
+		$typed = array(
+			'soy'    => '1.234,50',
+			'wheat'  => '238,100',
+			'corn'   => '1,500',
+			'cattle' => '238,123',
+			'usd'    => '1040.25',
+		);
+
+		$first = agronews_home_sanitize_settings( array( 'quotes' => $typed ) );
+		update_option( AGRONEWS_HOME_OPTION, $first );
+
+		$shown  = array_map( 'agronews_home_format_quote_for_input', array_intersect_key( $first['quotes'], $typed ) );
+		$second = agronews_home_sanitize_settings( array( 'quotes' => $shown ) );
+
+		$this->assertSame( '238.100', $first['quotes']['wheat'] );
+		$this->assertSame( '238,100', $shown['wheat'], 'The form shows a decimal comma.' );
+		$this->assertSame(
+			array_intersect_key( $first['quotes'], $typed ),
+			array_intersect_key( $second['quotes'], $typed ),
+			'A second save without changes must not alter any quote.'
+		);
+		$this->assertSame( $second, agronews_home_sanitize_settings( $second ), 'Running the callback on its own output, as the first add_option() does, changes nothing.' );
+	}
+
+	/**
+	 * The quotes bar never breaks on, or shows, a value stored before
+	 * validation existed: non-numeric and negative values are skipped.
+	 *
+	 * @return void
+	 */
+	public function test_invalid_stored_quotes_are_skipped_by_the_read_api() {
+		update_option(
+			AGRONEWS_HOME_OPTION,
+			array(
+				'quotes' => array(
+					'soy'   => '512.35',
+					'wheat' => 'USD 1.234',
+					'corn'  => '-5',
+				),
+			)
+		);
+
+		$this->assertSame( array( 'soy' ), wp_list_pluck( agronews_home_get_quotes(), 'key' ) );
+	}
+
+	/**
 	 * The read API returns the seven quotes in order, skipping the empty ones.
 	 *
 	 * @return void
